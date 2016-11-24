@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ [y] hybris Platform
+  ~ 
+  ~ Copyright (c) 2000-2016 SAP SE
+  ~ All rights reserved.
+  ~ 
+  ~ This software is the confidential and proprietary information of SAP 
+  ~ Hybris ("Confidential Information"). You shall not disclose such 
+  ~ Confidential Information and shall use it only in accordance with the 
+  ~ terms of the license agreement you entered into with SAP Hybris.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <property name="errorHandler" ref="responseErrorHandler"/>
+    </bean>
+
+    <bean id="responseErrorHandler" class="com.turkcell.tcp.mw.client.MwResponseErrorHandler"/>
+
+    <bean id="abstractRestClient" abstract="true" class="com.turkcell.tcp.mw.client.AbstractRestClient">
+        <property name="restTemplate" ref="restTemplate"/>
+    </bean>
+
+    <bean id="vposRestClient" parent="abstractRestClient" class="com.turkcell.tcp.mw.client.impl.DefaultVposRestClient">
+    </bean>
+
+    <alias name="defaultMiddlewareService" alias="middlewareService"/>
+    <bean id="defaultMiddlewareService" class="com.turkcell.tcp.mw.service.impl.DefaultMiddlewareService">
+        <property name="vposRestClient" ref="vposRestClient"/>
+    </bean>
+
+</beans>
