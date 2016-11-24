@@ -136,3 +136,5 @@ config/readme.txt
 **/web/webroot/WEB-INF/tld/addons/
 **/web/webroot/WEB-INF/views/addons/
 
+# Log files
+*.log
